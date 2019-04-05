@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height="78" width="87" viewBox="0 0 78 87">
+    <defs>
+        <style>
+            .cls-3{fill:none;stroke:#8a8f96;stroke-miterlimit:10;stroke-width:2px;}
+        </style>
+    </defs>
+    <title>rightArrow</title>
+    <g class="cls-1">
+        <g id="Layer_2" data-name="Layer 2">
+            <g id="container">
+                <polyline class="cls-3" points="29.5 27.96 39 37.46 29.5 46.96"/>
+            </g>
+        </g>
+    </g>
+</svg>

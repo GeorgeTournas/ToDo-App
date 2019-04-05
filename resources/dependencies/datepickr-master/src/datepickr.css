@@ -1,0 +1,121 @@
+.datepickr-wrapper {
+    display: inline-block;
+    position: relative;
+}
+
+.datepickr-calendar {
+	font-family: 'Roboto', sans-serif;
+	font-size: 12px;
+	background-color: #3A3F45;
+	color: #9A9FA7;
+	border: 1px solid #30353A;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	border-radius: 4px;
+	padding: 2px;
+	display: none;
+	position: absolute;
+    top: 100%;
+	left: 0;
+	z-index: 100;
+}
+
+.open .datepickr-calendar {
+    display: block;
+}
+
+.datepickr-calendar .datepickr-months {
+	background-color: #3A3F45;
+	/* border: 1px solid #30353A; */
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	border-radius: 4px;
+	color: #9A9FA7;
+	padding: 8px;
+	text-align: center;
+    font-size: 120%;
+}
+
+.datepickr-calendar .datepickr-prev-month,
+.datepickr-calendar .datepickr-next-month {
+	color: #9A9FA7;
+	text-decoration: none;
+	padding: 0 .4em;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+.datepickr-calendar .datepickr-prev-month {
+	float: left;
+}
+
+.datepickr-calendar .datepickr-next-month {
+	float: right;
+}
+
+.datepickr-calendar .datepickr-current-month {
+	padding: 0 .5em;
+}
+
+.datepickr-calendar .datepickr-prev-month:hover,
+.datepickr-calendar .datepickr-next-month:hover {
+	background-color: #30353A;
+	color: #9A9FA7;
+}
+
+.datepickr-calendar table {
+	border-collapse: collapse;
+	padding: 0;
+	width: 100%;
+}
+
+.datepickr-calendar thead {
+    font-size: 90%;
+}
+
+.datepickr-calendar th,
+.datepickr-calendar td {
+    width: 14.3%;
+}
+
+.datepickr-calendar th {
+	text-align: center;
+    padding: 5px;
+}
+
+.datepickr-calendar td {
+	text-align: center;
+	padding: 1px;
+}
+
+.datepickr-calendar .datepickr-day {
+	display: block;
+	color: #9A9FA7;
+	background-color: #3A3F45;
+	border: none;
+	padding: 5px;
+	cursor: pointer;
+}
+
+.datepickr-calendar .datepickr-day:hover {
+	background-color: #434951;
+	border: none;
+}
+
+.datepickr-calendar .today .datepickr-day {
+	background-color: #30353A;
+	color: #9A9FA7;
+}
+
+.datepickr-calendar .selected .datepickr-day {
+	background-color: #30353A;
+	color: #5b8858;
+}
+
+.datepickr-calendar .disabled .datepickr-day,
+.datepickr-calendar .disabled .datepickr-day:hover {
+    color: #696C70;
+    cursor: not-allowed;
+}
