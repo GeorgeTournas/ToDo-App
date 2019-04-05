@@ -9,7 +9,7 @@ Feel free to fork and play with the project.
 
 ### Prerequisites
 
-What things you need to install the software and how to install them
+ToDo App is developed in plain Javascript. The only dependency is a datepicker library used for setting the task date.([Datepickr](https://github.com/joshsalverda/datepickr))
 
 ```
 Give examples
