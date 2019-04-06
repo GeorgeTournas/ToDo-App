@@ -5,7 +5,7 @@ You complete a task by clicking on the check box next to task name.
 
 ## Getting Started
 
-Feel free to fork and play with the project.
+View online demo [here](https://georgetournas.github.io/to-do-list/).
 
 ### Prerequisites
 
