@@ -1,0 +1,23 @@
+{
+  "name": "ToDo-App",
+  "version": "1.0.0",
+  "description": "This is a simple, but yet powerfull, to do list application. A very simple UI, gives you the ability to add a new task and set the desired date for it. Navigating through dates, the app loads all relevant tasks for this date.\r You complete a task by clicking on the check box next to task name. To store tasks data, the project is using the local storage of the browser.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GeorgeTournas/ToDo-App.git"
+  },
+  "keywords": [],
+  "author": "George Tournas",
+  "license": "Bootstrap 4 project to get familiar with the new version",
+  "bugs": {
+    "url": "https://github.com/GeorgeTournas/ToDo-App/issues"
+  },
+  "homepage": "https://github.com/GeorgeTournas/ToDo-App#readme",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
+}
