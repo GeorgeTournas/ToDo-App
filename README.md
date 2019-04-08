@@ -10,7 +10,7 @@ Upcoming development with Electron framework for using as a desktop app.
 
 ## Getting Started
 
-View online demo [here](https://georgetournas.github.io/to-do-list/).
+View online demo [here](https://georgetournas.github.io/ToDo-App/).
 
 ### Prerequisites
 
