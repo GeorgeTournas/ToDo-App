@@ -22,7 +22,7 @@ ToDo App is developed in plain Javascript. The only dependency is a datepicker l
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
 
 ## Acknowledgments
 
