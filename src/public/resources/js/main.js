@@ -257,9 +257,26 @@ function navigateDays(getDate) {
     d = (d < 10) ? '0' + d : d;
     return [d, m, y].join('/');
 }
-
+getTasks();
 // 
 //API METHODS
+//get all tasks from API
+function getTasks() {
+    var getReq = new XMLHttpRequest();
+    getReq.open('GET', '/tasks');
+    getReq.send();
+    
+    getReq.addEventListener('load', () => {
+        var jsonGetResponse = JSON.parse(getReq.responseText);
+        console.log(jsonGetResponse)
+    });
+
+    getReq.addEventListener('error', () => {
+        console.log('ERROR: Could not load data.');
+    });
+};
+
+
 //send task to API
 function postTaskToAPI(name, description, date, status) {
     var postReq = new XMLHttpRequest();
@@ -275,11 +292,11 @@ function postTaskToAPI(name, description, date, status) {
     ));
     
     postReq.addEventListener('load', () => {
-        console.log(postReq.responseText);
+        var jsonResponse = JSON.parse(postReq.responseText);
+        console.log(jsonResponse);
     });
 
     postReq.addEventListener('error', () => {
         console.log('ERROR');
-        console.log(e);
-    })
+    });
 };
