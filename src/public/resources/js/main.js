@@ -1,16 +1,3 @@
-//create an array to store tasks values in localstorage
-let tasksData = (localStorage.getItem('tasksData')) ? JSON.parse(localStorage.getItem('tasksData')) : [];
-
-//create an object to store task values
-class TaskData {
-    constructor(taskName, taskDescr, taskDate, taskStatus) {
-        this.taskName = taskName;
-        this.taskDescr = taskDescr;
-        this.taskDate = taskDate;
-        this.taskStatus = taskStatus;
-    }
-}
-
 // get today date and show at load
 let date = Date.now();
 window.onload = () => {
@@ -43,7 +30,12 @@ const removeTaskIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448
 
 //render only tasks that are set for active date list
 let dateToCompare = toISODate(date);
-renderToDoList(dateToCompare);
+let tasksList;
+getTasks((tasksData) => {
+    tasksList = tasksData;
+    renderToDoList(dateToCompare,tasksList)
+}); 
+
 
 /* On focus add task input, expand parent container to reveal task date input */
 taskNameInput.addEventListener('focus', () => {
@@ -55,10 +47,10 @@ previousControl.addEventListener('click', () => {
     date -= 86400000; // a day in miliseconds
     document.getElementById('todayDay').innerText = navigateDays(date)[0];
     document.getElementById('todayDate').innerText = navigateDays(date)[1];
-
+    
     //load tasks based on their taskDate property
     dateToCompare = toISODate(date);
-    renderToDoList(dateToCompare);
+    renderToDoList(dateToCompare,tasksList);
 });
 
 // add event listener to next Control
@@ -66,10 +58,10 @@ nextControl.addEventListener('click', () => {
     date += 86400000; // a day in miliseconds
     document.getElementById('todayDay').innerText = navigateDays(date)[0];
     document.getElementById('todayDate').innerText = navigateDays(date)[1];
-
+       
     //load tasks based on their taskDate property
     dateToCompare = toISODate(date);
-    renderToDoList(dateToCompare);
+    renderToDoList(dateToCompare,tasksList);
 });
 
 /* On click add task icon, save in local storage
@@ -82,14 +74,15 @@ addTaskIcon.addEventListener('click', () => {
     message.classList.add('show');
 
     if (taskName && taskDate) {
-        let taskData = new TaskData(taskName, null, taskDate, 0);
-        tasksData.push(taskData);
-        postTaskToAPI(taskName, null, taskDate, 0);
+        
+        postTaskToAPI(taskName, null, taskDate, 0, (task) => {
+            if (taskDate == dateToCompare)
+             addToTaskList(task.id, task.task_name, task.task_date, task.task_status);
+        });
         result = "OK";
-        if (taskDate == dateToCompare) addToTaskList(taskName, taskDate, null);
+        
         
         clearFields(result);
-        datatoLocalstorage();
     } 
     else{
         result = "";
@@ -106,13 +99,13 @@ cancelTaskIcon.addEventListener('click', () => {
     clearFields(result);
 });
 
-//add data to local storage
+/* //add data to local storage
 function datatoLocalstorage() {
     localStorage.setItem('tasksData', JSON.stringify(tasksData));
-};
+}; */
 
 // render list 
-function renderToDoList(dateToCompare) {
+function renderToDoList(dateToCompare,tasksData) {
     // clear task list
     while (toDoList.firstChild) {
         toDoList.removeChild(toDoList.firstChild);
@@ -124,8 +117,8 @@ function renderToDoList(dateToCompare) {
     //render list if with tasks for active date
     for (var i = 0; i < tasksData.length; i++) {
         var task = tasksData[i];
-        if (dateToCompare == task.taskDate){
-            addToTaskList(task.taskName, task.taskDate, task.taskStatus);
+        if (dateToCompare == task.task_date){
+            addToTaskList(task.id,task.task_name, task.task_date, task.task_status);
         }
     }
 }
@@ -154,9 +147,10 @@ function clearFields(action) {
 }
 
 // add new tasks to DOM
-function  addToTaskList(name, date, status){
+function  addToTaskList(id,name, date, status){
     let task = document.createElement('li');
     task.classList.add('task');
+    task.setAttribute('data-id', id);
 
     let taskActions = document.createElement('div');
     taskActions.classList.add('taskActions');
@@ -202,20 +196,20 @@ function  addToTaskList(name, date, status){
 function setTaskStatus() {
     let taskItem = this.parentNode.parentNode;
     let taskItemName = taskItem.querySelector('.taskName').innerText;
-    for (var i=0; i<tasksData.length; i++){
-        if (tasksData[i].taskName == taskItemName){
+    for (var i=0; i<tasksList.length; i++){
+        if (tasksList[i].task_name == taskItemName){
             if (this.checked) {
-                tasksData[i].taskStatus = 1;    //task completed
+                tasksList[i].taskStatus = 1;    //task completed
                 break;
             } else {
-                tasksData[i].taskStatus = 0;    //task to do
+                tasksList[i].taskStatus = 0;    //task to do
                 break;
             }
         }
     }
 
-    //add to local storage
-    datatoLocalstorage();
+    /* //add to local storage
+    datatoLocalstorage(); */
 }
 
 // remove from DOM
@@ -227,8 +221,8 @@ function removeTaskItem() {
     // remove from tasksData array the object with key: taskName 
     tasksData = tasksData.filter(task => task.taskName != taskItemName);
 
-    //add to local storage
-    datatoLocalstorage()
+    /* //add to local storage
+    datatoLocalstorage() */
 }
 
 //  set previous and next days
@@ -257,18 +251,20 @@ function navigateDays(getDate) {
     d = (d < 10) ? '0' + d : d;
     return [d, m, y].join('/');
 }
-getTasks();
+
 // 
 //API METHODS
 //get all tasks from API
-function getTasks() {
+function getTasks(callback) {
     var getReq = new XMLHttpRequest();
     getReq.open('GET', '/tasks');
     getReq.send();
     
     getReq.addEventListener('load', () => {
         var jsonGetResponse = JSON.parse(getReq.responseText);
-        console.log(jsonGetResponse)
+        if (jsonGetResponse.error) return console.log(jsonGetResponse.error);
+
+        if(callback) callback(jsonGetResponse);
     });
 
     getReq.addEventListener('error', () => {
@@ -278,7 +274,7 @@ function getTasks() {
 
 
 //send task to API
-function postTaskToAPI(name, description, date, status) {
+function postTaskToAPI(name, description, date, status, callback) {
     var postReq = new XMLHttpRequest();
     postReq.open('POST', '/add');
     postReq.setRequestHeader('Content-Type', 'application/json');
@@ -292,8 +288,8 @@ function postTaskToAPI(name, description, date, status) {
     ));
     
     postReq.addEventListener('load', () => {
-        var jsonResponse = JSON.parse(postReq.responseText);
-        console.log(jsonResponse);
+        var results = JSON.parse(postReq.responseText);
+        if (callback) callback(results);
     });
 
     postReq.addEventListener('error', () => {
