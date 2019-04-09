@@ -209,10 +209,9 @@ function setTaskStatus() {
         }
     }
 
-    /* //add to local storage
-    datatoLocalstorage(); */
+   
 }
-
+ 
 // remove from DOM
 function removeTaskItem() {
     let taskItem = this.parentNode.parentNode;
