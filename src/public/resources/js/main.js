@@ -195,9 +195,10 @@ function  addToTaskList(id,name, date, status){
 // set task as completed
 function setTaskStatus() {
     let taskItem = this.parentNode.parentNode;
-    let taskItemName = taskItem.querySelector('.taskName').innerText;
+    let taskItemId = parseInt(taskItem.getAttribute('data-id'));
+    
     for (var i=0; i<tasksList.length; i++){
-        if (tasksList[i].task_name == taskItemName){
+        if (tasksList[i].id == taskItemId){
             if (this.checked) {
                 tasksList[i].taskStatus = 1;    //task completed
                 break;
@@ -215,15 +216,28 @@ function setTaskStatus() {
 // remove from DOM
 function removeTaskItem() {
     let taskItem = this.parentNode.parentNode;
-    let taskItemName = taskItem.querySelector('.taskName').innerText;
-    toDoList.removeChild(taskItem);
+    let taskItemId = parseInt(taskItem.getAttribute('data-id'));
 
-    // remove from tasksData array the object with key: taskName 
-    tasksData = tasksData.filter(task => task.taskName != taskItemName);
+    // remove from db the entry with key: id
+    var removeReq = new XMLHttpRequest();
+    removeReq.open('POST', '/tasks/' + taskItemId + '/remove');
+    removeReq.setRequestHeader('Content-Type', 'application/json');
+    removeReq.send();
 
-    /* //add to local storage
-    datatoLocalstorage() */
-}
+    removeReq.addEventListener('load', () => {
+        var results = JSON.parse(removeReq.responseText);
+        if (results.error) return console.log(results.error);
+
+        toDoList.removeChild(taskItem);
+        tasksList = tasksList.filter(task => task.id != taskItemId);
+
+    });
+
+    removeReq.addEventListener('error', () => {
+        console.log('ERROR');
+    });
+
+ }
 
 //  set previous and next days
 function navigateDays(getDate) {
