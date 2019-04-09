@@ -50,10 +50,10 @@ todoAPI.post('/add', (req, res) => {
                 //return inserted object as json
                 res.json({
                     id: results[0]['LAST_INSERT_ID()'],
-                    taskName: req.body.taskName,
-                    taskDescription: req.body.taskDescription,
-                    taskDate: req.body.taskDate,
-                    taskStatus: req.body.taskStatus
+                    task_name: req.body.taskName,
+                    task_description: req.body.taskDescription,
+                    task_date: req.body.taskDate,
+                    task_status: req.body.taskStatus
                 });
             });
 
