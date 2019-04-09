@@ -36,8 +36,7 @@ todoAPI.get('/tasks', (req,res)=>{
 // post task to db
 todoAPI.post('/add', (req, res) => {
     console.log('-- DATA SEND --');
-    console.log(req.body);
-    console.log('-- DATA SEND --');
+    
     dbConnect.query('INSERT INTO tasks (task_name,task_description,task_date,task_status) VALUES (?,?,?,?)',
         [req.body.taskName, req.body.taskDescription, req.body.taskDate, req.body.taskStatus],
         (error, results) => {
@@ -60,3 +59,13 @@ todoAPI.post('/add', (req, res) => {
             console.log('-- DATA SUCCESFULLY INSERTED TO DATABASE --');
         });
 });
+
+// remove task from db
+todoAPI.post('/tasks/:id/remove', (req, res) => {
+    dbConnect.query('DELETE FROM tasks WHERE id = ?', [req.params.id], (error, results) => {
+        if (error) return res.json({ error: error });
+
+        res.json({ task: 'DELETED' })
+        console.log(results);
+    })
+})
