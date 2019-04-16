@@ -56,7 +56,7 @@ todoAPI.post('/add', (req, res) => {
                 });
             });
 
-            console.log('-- DATA SUCCESFULLY INSERTED TO DATABASE --');
+            console.log('-- DATA SUCCESSFULLY INSERTED TO DATABASE --');
         });
 });
 
@@ -66,6 +66,19 @@ todoAPI.post('/tasks/:id/remove', (req, res) => {
         if (error) return res.json({ error: error });
 
         res.json({ task: 'DELETED' })
-        console.log(results);
+        console.log('-- TASK ' + req.params.id + ' SUCCESSFULLY REMOVED FROM DATABASE --');
+    })
+});
+
+// update task entry in db
+todoAPI.post('/tasks/:id/update', (req, res) => {
+    console.log(req.body);
+    dbConnect.query('UPDATE tasks SET task_status = ? WHERE id = ?', [req.body.taskStatus, req.params.id], (error, results) => {
+        if (error) {
+            console.log(error.sqlMessage);
+            return res.json({ error: error });
+        } 
+        res.json({ task: 'UPDATED', taskStatus: req.body.taskStatus})
+        console.log('-- TASK ' + req.params.id +' SUCCESSFULLY UPDATED --');
     })
 })

@@ -196,18 +196,37 @@ function  addToTaskList(id,name, date, status){
 function setTaskStatus() {
     let taskItem = this.parentNode.parentNode;
     let taskItemId = parseInt(taskItem.getAttribute('data-id'));
-    
+    let taskStatus;
     for (var i=0; i<tasksList.length; i++){
         if (tasksList[i].id == taskItemId){
             if (this.checked) {
-                tasksList[i].taskStatus = 1;    //task completed
+                taskStatus = 1;    //task completed
                 break;
             } else {
-                tasksList[i].taskStatus = 0;    //task to do
+                taskStatus = 0;    //task to do
                 break;
             }
         }
     }
+
+    // UPDATE db entry with key: id
+    var updateReq = new XMLHttpRequest();
+    updateReq.open('POST', '/tasks/' + taskItemId + '/update');
+    updateReq.setRequestHeader('Content-Type', 'application/json');
+    updateReq.send(JSON.stringify({ taskStatus: taskStatus}));
+
+    updateReq.addEventListener('load', () => {
+        var results = JSON.parse(updateReq.responseText);
+        if (results.error) return console.log(results.error);
+        
+        let updateTask = tasksList.findIndex(task => task.id == taskItemId);
+        tasksList[updateTask].task_status = results.taskStatus
+
+    });
+
+    updateReq.addEventListener('error', () => {
+        console.log('ERROR');
+    });
 
    
 }
@@ -218,13 +237,13 @@ function removeTaskItem() {
     let taskItemId = parseInt(taskItem.getAttribute('data-id'));
 
     // remove from db the entry with key: id
-    var removeReq = new XMLHttpRequest();
-    removeReq.open('POST', '/tasks/' + taskItemId + '/remove');
-    removeReq.setRequestHeader('Content-Type', 'application/json');
-    removeReq.send();
+    var updateReq = new XMLHttpRequest();
+    updateReq.open('POST', '/tasks/' + taskItemId + '/remove');
+    updateReq.setRequestHeader('Content-Type', 'application/json');
+    updateReq.send();
 
-    removeReq.addEventListener('load', () => {
-        var results = JSON.parse(removeReq.responseText);
+    updateReq.addEventListener('load', () => {
+        var results = JSON.parse(updateReq.responseText);
         if (results.error) return console.log(results.error);
 
         toDoList.removeChild(taskItem);
@@ -232,7 +251,7 @@ function removeTaskItem() {
 
     });
 
-    removeReq.addEventListener('error', () => {
+    updateReq.addEventListener('error', () => {
         console.log('ERROR');
     });
 
